@@ -1,4 +1,4 @@
-
+import React from 'react';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn React now !! 
         </a>
       </header>
     </div>
