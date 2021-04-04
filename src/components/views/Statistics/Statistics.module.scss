@@ -3,3 +3,12 @@
 .component {
   padding: $base-size;
 }
+
+.root {
+  flex-grow: 1;
+}
+
+.title {
+  margin: 4rem 0;
+  text-align: center;
+}
