@@ -1,59 +1,97 @@
-import React from 'redux';
-// import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './Waiter.module.scss';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
-const createData = (table, status, activityTime, deletion, add) => {
-  return {table, status, activityTime, deletion, add};
-};
-
-const rows = [
-  createData('1', 'status', '40 min ago', <Button size="small" variant="outlined" color="secondary">Delete</Button>, <Button size="small" variant="contained" color="primary">Add</Button> ),
-  createData('2', 'status', '31 min ago', <Button size="small" variant="outlined" color="secondary">Delete</Button>, <Button size="small"  variant="contained"color="primary">Add</Button> ),
-  createData('3', 'status', '42 min ago', <Button size="small" variant="outlined" color="secondary">Delete</Button>, <Button size="small"  variant="contained"color="primary">Add</Button> ),
+const demoContent = [
+  {id: '1', status: 'free', order: null},
+  {id: '2', status: 'thinking', order: null},
+  {id: '3', status: 'ordered', order: 123},
+  {id: '4', status: 'prepared', order: 234},
+  {id: '5', status: 'delivered', order: 345},
+  {id: '6', status: 'paid', order: 456},
 ];
 
+const renderActions = status => {
+  switch (status) {
+    case 'free':
+      return (
+        <>
+          <Button>thinking</Button>
+          <Button>new order</Button>
+        </>
+      );
+    case 'thinking':
+      return (
+        <Button>new order</Button>
+      );
+    case 'ordered':
+      return (
+        <Button>prepared</Button>
+      );
+    case 'prepared':
+      return (
+        <Button>delivered</Button>
+      );
+    case 'delivered':
+      return (
+        <Button>paid</Button>
+      );
+    case 'paid':
+      return (
+        <Button>free</Button>
+      );
+    default:
+      return null;
+  }
+};
+
 const Waiter = () => (
-  <div className={styles.component}>
+  <Paper className={styles.component}>
     <Breadcrumbs>
       <Button component={Link} to="waiter/order/new">Waiter new order</Button>
       <Button component={Link} to="waiter/order/:id">Waiter order id</Button>
     </Breadcrumbs>
-    <h2>Waiter view</h2>
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Table</TableCell>
-            <TableCell align="right">Table Status</TableCell>
-            <TableCell align="right">Last activity</TableCell>
-            <TableCell align="right">Actions</TableCell>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Table</TableCell>
+          <TableCell>Status</TableCell>
+          <TableCell>Order</TableCell>
+          <TableCell>Action</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {demoContent.map(row => (
+          <TableRow key={row.id}>
+            <TableCell component="th" scope="row">
+              {row.id}
+            </TableCell>
+            <TableCell>
+              {row.status}
+            </TableCell>
+            <TableCell>
+              {row.order && (
+                <Button href={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}>
+                  {row.order}
+                </Button>
+              )}
+            </TableCell>
+            <TableCell>
+              {renderActions(row.status)}
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.table}>
-              <TableCell component="th" scope="row">
-                {row.table}
-              </TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-              <TableCell align="right">{row.activityTime}</TableCell>
-              <TableCell align="right">{row.deletion}{row.add}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table> 
-    </TableContainer>
-  </div>
+        ))}
+      </TableBody>
+    </Table>
+  </Paper>
 );
 
 export default Waiter;
